@@ -37,8 +37,8 @@ Credits
 
 This implementation was greatly inspired by two similar gems:
 
-  [ruby-haml-js](https://github.com/dnagir/ruby-haml-js)
-  [tilt-jade](https://github.com/therabidbanana/tilt-jade)
+  - [ruby-haml-js](https://github.com/dnagir/ruby-haml-js)
+  - [tilt-jade](https://github.com/therabidbanana/tilt-jade)
   
 It was developed as a successor to tilt-jade to improve following:
 
