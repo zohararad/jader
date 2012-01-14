@@ -50,7 +50,7 @@ It was developed as a successor to tilt-jade to improve following:
 License
 -------
 
-    Copyright (C) 2011 by Boris Staal <boris@roundlake.ru>,
+    Copyright (C) 2011 by Boris Staal <boris@roundlake.ru>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
