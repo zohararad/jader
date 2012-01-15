@@ -15,7 +15,6 @@ describe Jade::Compiler do
 
   it 'should be served' do
     assets.should serve 'sample.js'
-    raise asset_for('sample.js').body.inspect
     asset_for('sample.js').body.should include "Yap, it works"
   end
 
