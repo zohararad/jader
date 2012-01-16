@@ -1,4 +1,5 @@
 require 'sprockets'
+require 'sprockets/engines'
 
 module Jade
   class Engine < Rails::Engine
