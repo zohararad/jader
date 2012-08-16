@@ -1,15 +1,16 @@
 module Jade
   module Renderer
 
-    def self.convert_template(template_text, vars = {})
+    def self.convert_template(template_text, controller_name, vars = {})
       compiler = Jade::Compiler.new :client => false
-      compiler.render(template_text, vars)
+      compiler.render(template_text, controller_name, vars)
     end
 
     def self.call(template)
       template.source.gsub!(/\#\{([^\}]+)\}/,"\\\#{\\1}") # escape Jade's #{somevariable} syntax
       %{
         template_source = %{#{template.source}}
+        controller_name = controller.controller_name
         variable_names = controller.instance_variable_names
         variable_names -= %w[@template]
         if controller.respond_to?(:protected_instance_variables)
@@ -21,7 +22,7 @@ module Jade
           next if name.include? '@_'
           variables[name.sub(/^@/, "")] = controller.instance_variable_get(name)
         end
-        Jade::Renderer.convert_template(template_source, variables.merge(local_assigns))
+        Jade::Renderer.convert_template(template_source, controller_name, variables.merge(local_assigns))
       }
     end
 

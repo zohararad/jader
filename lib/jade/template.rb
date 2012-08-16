@@ -22,7 +22,7 @@ module Jade
   private
 
     def compile_function
-      Jade::Compiler.new(:filename => file).compile data
+      Jade::Compiler.new(:filename => file).compile(data, file)
     end
 
   end
