@@ -7,4 +7,5 @@ group :test do
   gem 'johnson',      :platform => :mri_18
   gem 'therubyracer', :platform => :ruby
   gem 'therubyrhino', :platform => :jruby
+  gem 'sqlite3'
 end
