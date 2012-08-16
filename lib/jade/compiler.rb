@@ -37,5 +37,14 @@ module Jade
         }
       }
     end
+
+    def render(template, vars = {})
+      vars.each_pair do |k,v|
+        vars[k] = v.attributes if v.respond_to? :attributes
+      end
+      tmpl = context.eval("jade.precompile(#{template.to_json}, #{@options.to_json})")
+      context.eval("function(locals){#{tmpl}}.call(null,#{vars.to_json})")
+    end
+
   end
 end
