@@ -3,6 +3,15 @@ require 'spec_helper'
 describe Jade::Renderer do
 
   context 'users/index' do
+
+    before do
+      User.all.each do |user|
+        user.destroy
+      end
+      @joe = User.create(:name => 'Joe', :email => 'joe@gmail.com')
+      @mike = User.create(:name => 'Mike', :email => 'mike@gmail.com')
+    end
+
     before :each do
       get '/users'
     end
@@ -13,6 +22,11 @@ describe Jade::Renderer do
 
     it 'renders the template HTML' do
       response.body.should include '<h1 id="topHeading">Hello All Users</h1>'
+    end
+
+    it 'renders users' do
+      response.body.should include @mike.name
+      response.body.should include @joe.name
     end
 
     it 'uses a function available from server-side includes' do

@@ -1,2 +1,4 @@
 h1#topHeading Hello All Users
 h2.secondHeading!= Util.ISODate()
+- each user in users
+  p= user.name

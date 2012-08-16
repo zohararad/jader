@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   def index
-
+    @users = User.where('name != "Jim"')
   end
 
   def show
