@@ -43,7 +43,13 @@ module Jade
 
     def render(template, controller_name, vars = {})
       vars.each_pair do |k,v|
-        vars[k] = v.attributes if v.respond_to? :attributes
+        if v.respond_to? :to_hash
+          vars[k] = v.to_json
+        elsif v.respond_to? :attributes
+          vars[k] = v.attributes
+        else
+          vars[k] = v
+        end
       end
       combo = (template_mixins(controller_name) << template).join("\n").to_json
       tmpl = context.eval("jade.precompile(#{combo}, #{@options.to_json})")
