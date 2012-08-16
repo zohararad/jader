@@ -31,7 +31,7 @@ module Jade
       template = template.read if template.respond_to?(:read)
       file_name.match(/views\/([^\/]+)\//)
       controller_name = $1 || nil
-      combo = (template_helpers(controller_name) << template).join("\n").to_json
+      combo = (template_mixins(controller_name) << template).join("\n").to_json
       tmpl = context.eval("jade.precompile(#{combo}, #{@options.to_json})")
 
       %{
@@ -45,22 +45,27 @@ module Jade
       vars.each_pair do |k,v|
         vars[k] = v.attributes if v.respond_to? :attributes
       end
-      combo = (template_helpers(controller_name) << template).join("\n").to_json
+      combo = (template_mixins(controller_name) << template).join("\n").to_json
       tmpl = context.eval("jade.precompile(#{combo}, #{@options.to_json})")
-      context.eval("function(locals){#{tmpl}}.call(null,#{vars.to_json})")
+      context.eval(%{
+        function(locals){
+          #{Jade.configuration.includes.join("\n")}
+          #{tmpl}
+        }.call(null,#{vars.to_json})
+      })
     end
 
-    def template_helpers(controller_name)
-      helpers = []
+    def template_mixins(controller_name)
+      mixins = []
       unless Jade.configuration.mixins_path.nil?
         Dir["#{Jade.configuration.mixins_path}/*.jade"].each do |f|
           base_name = File.basename(f)
           if base_name == '%s_mixins.jade' % controller_name || base_name == 'application_mixins.jade'
-            helpers << IO.read(f)
+            mixins << IO.read(f)
           end
         end
       end
-      helpers
+      mixins
     end
 
   end

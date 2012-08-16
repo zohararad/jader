@@ -9,10 +9,11 @@ module Jade
   end
 
   class Configuration
-    attr_accessor :mixins_path
+    attr_accessor :mixins_path, :includes
 
     def initialize
       @mixins_path = nil
+      @includes = []
     end
   end
 end

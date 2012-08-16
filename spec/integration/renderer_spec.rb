@@ -3,14 +3,20 @@ require 'spec_helper'
 describe Jade::Renderer do
 
   context 'users/index' do
-    it 'render users index page' do
+    before :each do
       get '/users'
+    end
+
+    it 'render users index page' do
       response.should render_template(:index)
     end
 
     it 'renders the template HTML' do
-      get '/users'
       response.body.should include '<h1>Hello All Users</h1>'
+    end
+
+    it 'uses a function available from server-side includes' do
+      response.body.should =~ /\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/
     end
   end
 
