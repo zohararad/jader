@@ -2,7 +2,7 @@ module Jade
   module Renderer
 
     def self.convert_template(template_text, controller_name, vars = {})
-      compiler = Jade::Compiler.new :client => false
+      compiler = Jade::Compiler.new :client => true
       compiler.render(template_text, controller_name, vars)
     end
 

@@ -12,7 +12,7 @@ describe Jade::Renderer do
     end
 
     it 'renders the template HTML' do
-      response.body.should include '<h1>Hello All Users</h1>'
+      response.body.should include '<h1 id="topHeading">Hello All Users</h1>'
     end
 
     it 'uses a function available from server-side includes' do

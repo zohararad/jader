@@ -49,6 +49,7 @@ module Jade
       tmpl = context.eval("jade.precompile(#{combo}, #{@options.to_json})")
       context.eval(%{
         function(locals){
+          #{Jade::Source::runtime}
           #{Jade.configuration.includes.join("\n")}
           #{tmpl}
         }.call(null,#{vars.to_json})
