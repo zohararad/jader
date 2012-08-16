@@ -5,4 +5,4 @@
 // the compiled file.
 //
 //= require 'jade/runtime'
-//= require_tree .
+//= require ./sample
