@@ -42,8 +42,19 @@ module Jade
       vars.each_pair do |k,v|
         vars[k] = v.attributes if v.respond_to? :attributes
       end
-      tmpl = context.eval("jade.precompile(#{template.to_json}, #{@options.to_json})")
+      combo = (helpers << template).join("\n").to_json
+      tmpl = context.eval("jade.precompile(#{combo}, #{@options.to_json})")
       context.eval("function(locals){#{tmpl}}.call(null,#{vars.to_json})")
+    end
+
+    def helpers
+      helpers = []
+      unless Jade.configuration.mixins_path.nil?
+        Dir["#{Jade.configuration.mixins_path}/*.jade"].each do |f|
+          helpers << IO.read(f)
+        end
+      end
+      helpers
     end
 
   end

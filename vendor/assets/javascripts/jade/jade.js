@@ -770,7 +770,7 @@ exports.Lexer = Lexer;
 exports.nodes = require('./nodes');
 
 /**
- * Jade runtime helpers.
+ * Jade runtime mixins.
  */
 
 exports.runtime = runtime;
