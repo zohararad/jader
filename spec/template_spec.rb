@@ -1,8 +1,10 @@
 require 'spec_helper'
-
+require 'fileutils'
 describe Jade::Compiler do
+
   before :all do
-    # TODO: Clean dummy sprockets cache
+    d = Rails.root.join('tmp','cache','assets')
+    FileUtils.rm_r d if Dir.exists? d
   end
 
   def template(source, file)
@@ -25,4 +27,14 @@ describe Jade::Compiler do
     }
     context.eval('html').should == "<!DOCTYPE html><head><title>Hello, Yorik :)</title></head><body>Yap, it works\n</body>"
   end
+
+  it 'should use mixins in JST' do
+    phrase = 'Hi There'
+    context = ExecJS.compile %{
+      #{asset_for('application.js').to_s}
+      html = JST['views/users/index']({phrase: '#{phrase}'})
+    }
+    context.eval('html').should include(phrase.upcase)
+  end
+
 end
