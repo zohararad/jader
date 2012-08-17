@@ -5,7 +5,18 @@ module Jade
     module ClassMethods
 
       def jade_serializable(*args)
-        class_variable_set(:@@jade_attributes, (args || []))
+        serialize = {
+          :attrs => [],
+          :merge => true
+        }
+        args.each do |arg|
+          if arg.is_a? Symbol
+            serialize[:attrs] << arg
+          elsif arg.is_a? Hash
+            serialize[:merge] = arg[:merge] if arg.include?(:merge)
+          end
+        end
+        class_variable_set(:@@serialize, serialize)
       end
 
     end
@@ -15,17 +26,19 @@ module Jade
     end
 
     def jade_attributes
-      begin
-        self.class.class_variable_get(:@@jade_attributes) || []
-      rescue
-        self.attributes.keys
+      s = self.class.class_variable_get(:@@serialize)
+      if s[:merge]
+        attrs = s[:attrs] + self.attributes.keys
+      else
+        attrs = s[:attrs]
       end
+      attrs.collect{|attr| attr.to_sym}.uniq
     end
 
     def to_jade
       h = {}
       self.jade_attributes.each do |attr|
-        h[attr.to_sym] = self.send attr.to_sym
+        h[attr] = self.send(attr)
       end
       h
     end
