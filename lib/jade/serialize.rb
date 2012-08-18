@@ -52,7 +52,7 @@ class Object
     if self.respond_to? :to_a
       self.to_a.to_jade
     else
-      self
+      nil
     end
   end
 end
@@ -67,7 +67,7 @@ end
 
 class Array
   def to_jade
-    map {|a| a.to_jade }
+    map {|a| a.respond_to?(:to_jade) ? a.to_jade : a }
   end
 end
 
@@ -75,7 +75,7 @@ class Hash
   def to_jade
     res = {}
     each_pair do |key, value|
-      res[key] = value.to_jade
+      res[key] = (value.respond_to?(:to_jade) ? value.to_jade : value)
     end
     res
   end
