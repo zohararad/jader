@@ -36,7 +36,7 @@ module Jade
     end
 
     def to_jade
-      h = {}
+      h = {:_class => self.class.name}
       self.jade_attributes.each do |attr|
         h[attr] = self.send(attr)
       end
