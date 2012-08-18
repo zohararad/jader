@@ -52,7 +52,7 @@ class Object
     if self.respond_to? :to_a
       self.to_a.to_jade
     else
-      nil
+      self
     end
   end
 end
@@ -67,7 +67,7 @@ end
 
 class Array
   def to_jade
-    map {|a| a.respond_to?(:to_jade) ? a.to_jade : a }
+    map {|a| a.to_jade }
   end
 end
 
