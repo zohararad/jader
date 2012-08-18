@@ -75,7 +75,7 @@ class Hash
   def to_jade
     res = {}
     each_pair do |key, value|
-      res[key] = (value.respond_to?(:to_jade) ? value.to_jade : value)
+      res[key] = value.to_jade
     end
     res
   end
