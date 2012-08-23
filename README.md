@@ -102,7 +102,7 @@ end
 ```
 
 Note the call to `to_jade` on the `@users` collection. This ensures our users are properly serialized for use inside our template.
-See the **Serialization** section below for more details.
+See the [Serialization](https://github.com/zohararad/jader#serialization) section below for more details.
 
 In our `application.js` file lets write the following:
 
@@ -256,7 +256,7 @@ end
 
 ### Notes on performance
 
-On the client-side, Jader will add the mixins code into your Jade template. This can potentially increase your client-side file size dramatically. Since application-level
+On the client-side, Jader will add the mixins code into your Jade JST template. This can potentially increase your client-side file size dramatically. Since application-level
 mixins are included in each and every template, please be sure to keep them to a bare minimum.
 
 ## Javascript inclusion
@@ -276,9 +276,11 @@ Jader.configure do |config|
 end
 ```
 
-`Jader::Configuration.includes` is an array that accepts raw Javascript strings and is passed to the server-side template evaluation context.
+`Jader::Configuration.includes` is an array that accepts raw Javascript strings that are, in turn, passed to the server-side template evaluation context.
 
-To give a more pragmatic example of using `I18n.js` on both server and client, lets assume we have `gem 'i18n-js'` installed.
+To give a more pragmatic example of using Jader inclusions, lets try using `I18n.js` on both server and client.
+
+For the sake of this example, we assume `gem 'i18n-js'` is installed in our application.
 
 Our `application.js` file will then include:
 
