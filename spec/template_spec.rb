@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'fileutils'
-describe Jade::Compiler do
+describe Jader::Compiler do
 
   before :all do
     d = Rails.root.join('tmp','cache','assets')
@@ -8,11 +8,11 @@ describe Jade::Compiler do
   end
 
   def template(source, file)
-    Jade::Template.new(file){source}
+    Jader::Template.new(file){source}
   end
 
   it 'should have default mime type' do
-    Jade::Template.default_mime_type.should == 'application/javascript'
+    Jader::Template.default_mime_type.should == 'application/javascript'
   end
 
   it 'should be served' do

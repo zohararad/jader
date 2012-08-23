@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Jade::Compiler do
+describe Jader::Compiler do
   before :each do
-    @compiler = Jade::Compiler.new
+    @compiler = Jader::Compiler.new
   end
 
   it "should respect default options" do

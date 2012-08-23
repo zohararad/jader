@@ -1,4 +1,4 @@
-module Jade
+module Jader
   class << self
     attr_accessor :configuration
   end

@@ -1,4 +1,4 @@
-module Jade
+module Jader
 
   module Serialize
 

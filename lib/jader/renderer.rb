@@ -1,8 +1,8 @@
-module Jade
+module Jader
   module Renderer
 
     def self.convert_template(template_text, controller_name, vars = {})
-      compiler = Jade::Compiler.new :client => true
+      compiler = Jader::Compiler.new :client => true
       compiler.render(template_text, controller_name, vars)
     end
 
@@ -22,7 +22,7 @@ module Jade
           next if name.include? '@_'
           variables[name.sub(/^@/, "")] = controller.instance_variable_get(name)
         end
-        Jade::Renderer.convert_template(template_source, controller_name, variables.merge(local_assigns))
+        Jader::Renderer.convert_template(template_source, controller_name, variables.merge(local_assigns))
       }
     end
 

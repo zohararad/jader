@@ -1,6 +1,6 @@
 require 'tilt/template'
 
-module Jade
+module Jader
   class Template < Tilt::Template
     self.default_mime_type = 'application/javascript'
 
@@ -22,7 +22,7 @@ module Jade
   private
 
     def compile_function
-      Jade::Compiler.new(:filename => file).compile(data, file)
+      Jader::Compiler.new(:filename => file).compile(data, file)
     end
 
   end

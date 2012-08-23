@@ -1,4 +1,4 @@
-module Jade
+module Jader
   module Source
     def self.jade
       IO.read jade_path

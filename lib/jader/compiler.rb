@@ -1,6 +1,6 @@
 require 'execjs'
 
-module Jade
+module Jader
   class Compiler
     attr_accessor :options
 
@@ -14,7 +14,7 @@ module Jade
     def source
       @source ||= %{
         var window = {};
-        #{Jade::Source::jade}
+        #{Jader::Source::jade}
         var jade = window.jade;
       }
     end
@@ -46,8 +46,8 @@ module Jade
       tmpl = context.eval("jade.precompile(#{combo}, #{@options.to_json})")
       context.eval(%{
         function(locals){
-          #{Jade::Source::runtime}
-          #{Jade.configuration.includes.join("\n")}
+          #{Jader::Source::runtime}
+          #{Jader.configuration.includes.join("\n")}
           #{tmpl}
         }.call(null,#{vars.to_jade.to_json})
       })
@@ -55,8 +55,8 @@ module Jade
 
     def template_mixins(controller_name)
       mixins = []
-      unless Jade.configuration.mixins_path.nil?
-        Dir["#{Jade.configuration.mixins_path}/*.jade"].each do |f|
+      unless Jader.configuration.mixins_path.nil?
+        Dir["#{Jader.configuration.mixins_path}/*.jade"].each do |f|
           base_name = File.basename(f)
           if base_name == '%s_mixins.jade' % controller_name || base_name == 'application_mixins.jade'
             mixins << IO.read(f)

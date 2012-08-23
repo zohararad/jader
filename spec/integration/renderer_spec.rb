@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Jade::Renderer do
+describe Jader::Renderer do
 
   context 'users/index' do
 
