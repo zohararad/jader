@@ -5,14 +5,14 @@ module Jader
   class Template < Tilt::Template
     self.default_mime_type = 'application/javascript'
 
-    # Ensure ExecJS is available when engine is initialized
+    # Ensure V8 is available when engine is initialized
     def self.engine_initialized?
-      defined? ::ExecJS
+      defined? ::V8
     end
 
     # Require 'execjs' when initializing engine
     def initialize_engine
-      require_template_library 'execjs'
+      require_template_library 'v8'
     end
 
     def prepare
