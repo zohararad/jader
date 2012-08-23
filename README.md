@@ -332,7 +332,7 @@ Jader is built upon the wonderful work of [Boris Staal](https://github.com/round
   - [ruby-haml-js](https://github.com/dnagir/ruby-haml-js)
   - [tilt-jade](https://github.com/therabidbanana/tilt-jade)
   
-Boris Staal's Jade Rubygem It was developed as a successor to tilt-jade to improve following:
+Boris Staal's [Jade](https://github.com/roundlake/jade/) Rubygem was developed as a successor to tilt-jade to improve following:
 
   * Add debugging capabilities (slightly different build technique)
   * Support exact Jade.JS lib without modifications
