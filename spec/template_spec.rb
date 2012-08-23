@@ -21,16 +21,18 @@ describe Jader::Compiler do
   end
 
   it 'should work fine with JST' do
-    context = ExecJS.compile %{
+    context = V8::Context.new
+    context.eval %{
       #{asset_for('application.js').to_s}
       html = JST['sample']({name: 'Yorik'})
     }
-    context.eval('html').should == "<!DOCTYPE html><head><title>Hello, Yorik :)</title></head><body>Yap, it works\n</body>"
+    context.eval('html').should == "<!DOCTYPE html><head><title>Hello, Yorik :)</title></head><body>Yap, it works</body>"
   end
 
   it 'should use mixins in JST' do
     phrase = 'Hi There'
-    context = ExecJS.compile %{
+    context = V8::Context.new
+    context.eval %{
       #{asset_for('application.js').to_s}
       html = JST['views/users/index']({phrase: '#{phrase}'})
     }
