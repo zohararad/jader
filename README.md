@@ -43,7 +43,7 @@ The most significant differences between using standard server-side Ruby-based e
 
 Our template code should look like this:
 
-```
+```jade
 ul.users
   each user in users
     li.user= user.name
@@ -58,7 +58,7 @@ Since Rails doesn't expect server-side templates to live under `app/assets` we n
 
 Inside your `application_controller.rb` add the following:
 
-```
+```ruby
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
@@ -131,7 +131,7 @@ Jader does not assume your Rails models should be serialized by default. Instead
 
 To enable this behaviour, consider the following example:
 
-```
+```ruby
 class User < ActiveRecord::Base
 
   include Jader::Serialize
@@ -149,7 +149,7 @@ By default, calling `jade_serializable` with no arguments will serialize all you
 
 Consider the following code:
 
-```
+```ruby
 # define our model
 class User < ActiveRecord::Base
 
@@ -180,7 +180,7 @@ which attributes should always be serialized, and whether we'd like these attrib
 Consider the following code:
 
 
-```
+```ruby
 # define our models
 
 class Favorite < ActiveRecord::Base
@@ -221,7 +221,7 @@ To only serialize the specified attributes, call `jade_serializable` with `:merg
 
 Invokation format for `jade_serializable` is:
 
-```
+```ruby
 jade_serializable :attr1, :attr2, :attr3 ...., :merge => true/false
 ```
 
@@ -284,7 +284,7 @@ For the sake of this example, we assume `gem 'i18n-js'` is installed in our appl
 
 Our `application.js` file will then include:
 
-```
+``` javascript
 //= require i18n
 //= require i18n/translations
 ```
