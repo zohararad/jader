@@ -6,3 +6,5 @@ pkg/*
 .rvmrc
 *.sqlite
 spec/dummy/tmp/
+doc/
+.yardoc
