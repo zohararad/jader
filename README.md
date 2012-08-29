@@ -56,28 +56,16 @@ and the call to `=yield` will render your Jade template above.
 
 Since Rails doesn't expect server-side templates to live under `app/assets` we need to add our client-side views path to Rails views lookup path.
 
-Inside your `application_controller.rb` add the following:
+Assuming we have an initializer `app/config/initializers/jader.rb` we can add our client-side views directory like this:
 
 ```ruby
-class ApplicationController < ActionController::Base
-  protect_from_forgery
-
-  before_filter :prepend_view_paths
-
-  # .... application controller code
-
-  private
-
-  # Adds Client-Side views to render path
-  def prepend_view_paths
-    prepend_view_path Rails.root.join('app', 'assets', 'javascripts', , 'views')
-  end
-
+Jader.configure do |config|
+  # make your client-side views directory discoverable to Rails
+  config.views_path = Rails.root.join('app','assets','javascripts','views')
 end
-
 ```
 
-This is a ad-hoc solution that should change in the near future.
+Internally, this adds a `before_filter` to `ApplicationController::Base` that prepends the provided path to `ActionView::Context` .
 
 ### Client-side code
 
@@ -276,7 +264,7 @@ Jader.configure do |config|
 end
 ```
 
-`Jader::Configuration.includes` is an array that accepts raw Javascript strings that are, in turn, passed to the server-side template evaluation context.
+`Jader.configuration.includes` is an array that accepts raw Javascript strings that are, in turn, passed to the server-side template evaluation context.
 
 To give a more pragmatic example of using Jader inclusions, lets try using `I18n.js` on both server and client.
 
@@ -314,6 +302,8 @@ Assuming we have an initializer `app/config/initializers/jader.rb` it should inc
 ```ruby
 Jader.configure do |config|
   config.mixins_path = Rails.root.join('app','assets','javascripts','mixins')
+  # make your client-side views directory discoverable to Rails
+  config.views_path = Rails.root.join('app','assets','javascripts','views')
   # Use some javascript from a file that's not available in the asset pipeline
   config.includes << IO.read(Rails.root.join('app','assets','javascripts','includes','util.js'))
   # wait for assets to be ready
