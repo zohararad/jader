@@ -7,7 +7,8 @@ module Jader
   # @yield [config] Jader::Configuration instance
   # @example
   #     Jader.configure do |config|
-  #       config.mixins_path = Rails.root.join('app','assets','javascripts','helpers')
+  #       config.mixins_path = Rails.root.join('app','assets','javascripts','mixins')
+  #       config.views_path = Rails.root.join('app','assets','javascripts','views')
   #       config.includes << IO.read Rails.root.join('app','assets','javascripts','util.js')
   #     end
   def self.configure
