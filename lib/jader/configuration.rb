@@ -17,11 +17,12 @@ module Jader
 
   # Jader configuration class
   class Configuration
-    attr_accessor :mixins_path, :includes
+    attr_accessor :mixins_path, :views_path, :includes
 
     # Initialize Jader::Configuration class with default values
     def initialize
       @mixins_path = nil
+      @views_path = nil
       @includes = []
     end
   end

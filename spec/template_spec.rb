@@ -34,7 +34,7 @@ describe Jader::Compiler do
     context = V8::Context.new
     context.eval %{
       #{asset_for('application.js').to_s}
-      html = JST['views/users/index']({phrase: '#{phrase}'})
+      html = JST['views/users/dummy']({phrase: '#{phrase}'})
     }
     context.eval('html').should include(phrase.upcase)
   end

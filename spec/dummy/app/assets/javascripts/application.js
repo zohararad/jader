@@ -6,4 +6,4 @@
 //
 //= require 'jade/runtime'
 //= require ./sample
-//= require views/users/index
+//= require views/users/dummy
