@@ -41,6 +41,12 @@ module Jader
       h = {:model => self.class.name.downcase}
       self.jade_attributes.each do |attr|
         h[attr] = self.send(attr)
+
+        ans = h[attr].class.ancestors
+        if h[attr].class.respond_to?(:jade_serializable) || ans.include?(Enumerable) || ans.include?(ActiveModel::Validations)
+          h[attr] = h[attr].to_jade
+        else
+        end
       end
       h
     end
@@ -62,7 +68,7 @@ end
 
 class Object
   # Serialize Object to Jade format. Invoke `self.to_jade` if instance responds to `to_jade`
-  def to_ice
+  def to_jade
     if self.respond_to? :to_a
       self.to_a.to_jade
     else
