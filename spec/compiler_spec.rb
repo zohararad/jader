@@ -19,7 +19,7 @@ describe Jader::Compiler do
   end
 
   it "should define Jade.JS compiler version" do
-    @compiler.jade_version.should == "0.27.2"
+    @compiler.jade_version.should == "0.27.6"
   end
 
   it "should compile small thing" do

@@ -483,8 +483,9 @@ Compiler.prototype = {
    */
 
   visitText: function(text){
-    text = utils.text(text.val.replace(/\\/g, '\\\\'));
+    text = utils.text(text.val.replace(/\\/g, '_SLASH_'));
     if (this.escape) text = escape(text);
+    text = text.replace(/_SLASH_/g, '\\\\');
     this.buffer(text);
   },
 
@@ -587,7 +588,9 @@ Compiler.prototype = {
 
     this.buf.push(''
       + '  } else {\n'
+      + '    var $$l = 0;\n'
       + '    for (var ' + each.key + ' in ' + each.obj + ') {\n'
+      + '      $$l++;'
        + '      if (' + each.obj + '.hasOwnProperty(' + each.key + ')){'
       + '      var ' + each.val + ' = ' + each.obj + '[' + each.key + '];\n');
 
@@ -595,7 +598,13 @@ Compiler.prototype = {
 
      this.buf.push('      }\n');
 
-    this.buf.push('   }\n  }\n}).call(this);\n');
+    this.buf.push('    }\n');
+    if (each.alternative) {
+      this.buf.push('    if ($$l === 0) {');
+      this.visit(each.alternative);
+      this.buf.push('    }');
+    }
+    this.buf.push('  }\n}).call(this);\n');
   },
 
   /**
@@ -813,7 +822,6 @@ module.exports = {
    */
 
   coffeescript: function(str){
-    str = str.replace(/\\n/g, '\n');
     var js = require('coffee-script').compile(str).replace(/\\/g, '\\\\').replace(/\n/g, '\\n');
     return '<script type="text/javascript">\\n' + js + '</script>';
   }
@@ -872,7 +880,7 @@ var Parser = require('./parser')
  * Library version.
  */
 
-exports.version = '0.27.2';
+exports.version = '0.27.6';
 
 /**
  * Expose self closing tags.
@@ -1107,7 +1115,6 @@ exports.__express = exports.renderFile;
 }); // module: jade.js
 
 require.register("lexer.js", function(module, exports, require){
-
 /*!
  * Jade - Lexer
  * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
@@ -1284,6 +1291,8 @@ Lexer.prototype = {
     var captures;
     if (captures = /^\n *\n/.exec(this.input)) {
       this.consume(captures[0].length - 1);
+
+      ++this.lineno;
       if (this.pipeless) return this.tok('text', '');
       return this.next();
     }
@@ -1584,8 +1593,8 @@ Lexer.prototype = {
       var flags = captures[1];
       captures[1] = captures[2];
       var tok = this.tok('code', captures[1]);
-      tok.escape = flags[0] === '=';
-      tok.buffer = flags[0] === '=' || flags[1] === '=';
+      tok.escape = flags.charAt(0) === '=';
+      tok.buffer = flags.charAt(0) === '=' || flags.charAt(1) === '=';
       return tok;
     }
   },
@@ -1614,8 +1623,10 @@ Lexer.prototype = {
       }
 
       function interpolate(attr) {
-        return attr.replace(/#\{([^}]+)\}/g, function(_, expr){
-          return quote + " + (" + expr + ") + " + quote;
+        return attr.replace(/(\\)?#\{([^}]+)\}/g, function(_, escape, expr){
+          return escape
+             ? _
+             : quote + " + (" + expr + ") + " + quote;
         });
       }
 
@@ -2108,6 +2119,7 @@ Block.prototype.includeBlock = function(){
     else if (node.textOnly) continue;
     else if (node.includeBlock) ret = node.includeBlock();
     else if (node.block && !node.block.isEmpty()) ret = node.block.includeBlock();
+    if (ret.yield) return ret;
   }
 
   return ret;
@@ -2660,7 +2672,8 @@ require.register("parser.js", function(module, exports, require){
  */
 
 var Lexer = require('./lexer')
-  , nodes = require('./nodes');
+  , nodes = require('./nodes')
+  , utils = require('./utils');
 
 /**
  * Initialize `Parser` with the given input `str` and `filename`.
@@ -3135,7 +3148,7 @@ Parser.prototype = {
     var path = join(dir, path)
       , str = fs.readFileSync(path, 'utf8')
      , parser = new Parser(str, path, this.options);
-    parser.blocks = this.blocks;
+    parser.blocks = utils.merge({}, this.blocks);
     parser.mixins = this.mixins;
 
     this.context(parser);
@@ -3582,12 +3595,16 @@ require.register("utils.js", function(module, exports, require){
  */
 
 var interpolate = exports.interpolate = function(str){
-  return str.replace(/(\\)?([#!]){(.*?)}/g, function(str, escape, flag, code){
+  return str.replace(/(_SLASH_)?([#!]){(.*?)}/g, function(str, escape, flag, code){
+    code = code
+      .replace(/\\'/g, "'")
+      .replace(/_SLASH_/g, '\\');
+
     return escape
-      ? str
+      ? str.slice(7)
       : "' + "
         + ('!' == flag ? '' : 'escape')
-        + "((interp = " + code.replace(/\\'/g, "'")
+        + "((interp = " + code
         + ") == null ? '' : interp) + '";
   });
 };
@@ -3615,6 +3632,22 @@ var escape = exports.escape = function(str) {
 exports.text = function(str){
   return interpolate(escape(str));
 };
+
+/**
+ * Merge `b` into `a`.
+ *
+ * @param {Object} a
+ * @param {Object} b
+ * @return {Object}
+ * @api public
+ */
+
+exports.merge = function(a, b) {
+  for (var key in b) a[key] = b[key];
+  return a;
+};
+
+
 }); // module: utils.js
 
 window.jade = require("jade");
