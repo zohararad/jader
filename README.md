@@ -314,6 +314,12 @@ Jader.configure do |config|
 end
 ```
 
+## Asset Pipeline
+
+In case your Rails asset pipeline is configured **not** to load the entire Rails environment when calling `rake assets:precompile`, you should include Jader's configuration initalizer in your Rakefile.
+
+Simply add `require File.expand_path('../config/initializers/jader', __FILE__)` before `require File.expand_path('../config/application', __FILE__)` in your Rakefile, and ensure Jader is properly configured when your assets are precompiled
+
 ## Kudos
 
 Jader is built upon the wonderful work of [Boris Staal](https://github.com/roundlake/jade/) and draws heavily from:
