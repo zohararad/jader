@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'therubyracer', "~> 0.12.0"
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'rails', '>= 3.1'
+  s.add_development_dependency 'rails', '~> 3.2'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'yard'
 end
