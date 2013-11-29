@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'libv8'
   s.add_dependency 'tilt'
   s.add_dependency 'sprockets'
-  s.add_dependency 'therubyracer', "~> 0.10.2"
+  s.add_dependency 'therubyracer', "~> 0.12.0"
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'rails', '>= 3.1'
