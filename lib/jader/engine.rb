@@ -4,7 +4,8 @@ require 'sprockets/engines'
 module Jader
   class Engine < Rails::Engine
     initializer "jade.configure_rails_initialization", :before => 'sprockets.environment', :group => :all do |app|
-      app.assets.register_engine '.jade', ::Jader::Template
+      sprockets_env = app.assets || Sprockets
+      sprockets_env.register_engine '.jade', ::Jader::Template
     end
 
     initializer 'jader.prepend_views_path', :after => :add_view_paths do |app|
