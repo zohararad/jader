@@ -20,9 +20,10 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'tilt'
   s.add_dependency 'sprockets'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'rspec-rails'
   s.add_dependency 'execjs'
+  s.add_development_dependency 'rspec', '~> 3.1'
+  s.add_development_dependency 'rspec-rails', '~> 3.1'
+  s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.0'
   s.add_development_dependency 'rails', '~> 3.2'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'yard'
