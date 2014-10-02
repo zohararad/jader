@@ -21,8 +21,7 @@ describe Jader::Compiler do
   end
 
   it 'should work fine with JST' do
-    context = V8::Context.new
-    context.eval %{
+    context = ExecJS.compile %{
       #{asset_for('application.js').to_s}
       html = JST['sample']({name: 'Yorik'})
     }
@@ -31,8 +30,7 @@ describe Jader::Compiler do
 
   it 'should use mixins in JST' do
     phrase = 'Hi There'
-    context = V8::Context.new
-    context.eval %{
+    context = ExecJS.compile %{
       #{asset_for('application.js').to_s}
       html = JST['views/users/dummy']({phrase: '#{phrase}'})
     }
