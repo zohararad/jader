@@ -18,12 +18,11 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'libv8'
   s.add_dependency 'tilt'
   s.add_dependency 'sprockets'
-  s.add_dependency 'therubyracer', "> 0.12.0"
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rspec-rails'
+  s.add_dependency 'execjs'
   s.add_development_dependency 'rails', '~> 3.2'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'yard'
