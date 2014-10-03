@@ -293,6 +293,8 @@ Jader.configure do |config|
 end
 ```
 
+> If you want to use node.js runtime, you'll have to append your javasript modules into the global `this` object (e.g. `this.Util = Util`) to make them visible inside the templates. (See: `/spec/dummy/app/assets/javascripts/includes/util.js`)
+
 ## Configuration
 
 Its recommended to configure Jader inside a Rails initializer so that configuration is defined at boot time.
@@ -330,7 +332,7 @@ Jader is built upon the wonderful work of [Boris Staal](https://github.com/round
   - [ice](https://github.com/ludicast/ice)
   - [ruby-haml-js](https://github.com/dnagir/ruby-haml-js)
   - [tilt-jade](https://github.com/therabidbanana/tilt-jade)
-  
+
 Boris Staal's [Jade](https://github.com/roundlake/jade/) Rubygem was developed as a successor to tilt-jade to improve following:
 
   * Add debugging capabilities (slightly different build technique)
