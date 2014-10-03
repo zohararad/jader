@@ -1,4 +1,4 @@
-require 'v8'
+require 'execjs'
 
 module Jader
   class Compiler
@@ -25,22 +25,25 @@ module Jader
       }
     end
 
-    # V8 context with Jade code compiled
-    # @yield [context] V8::Context compiled Jade source code in V8 context
-    def v8_context
-      V8::C::Locker() do
-        context = V8::Context.new
-        context.eval(source)
-        yield context
-      end
+    # ExecJS context with Jade code compiled
+    # @return [ExecJS::Context] compiled Jade source code context
+    def context
+      @context ||= ExecJS.compile source
+    end
+
+    # ExecJS context for the server-side rendering with Jade code compiled
+    # @return [ExecJS::Context] compiled Jade source code context for the server-side rendering
+    def server_context
+      @server_context ||= ExecJS.compile([
+        source,
+        Jader.configuration.includes.join("\n")
+      ].join(" "))
     end
 
     # Jade Javascript engine version
     # @return [String] version of Jade javascript engine installed in `vendor/assets/javascripts`
     def jade_version
-      v8_context do |context|
-        context.eval("jade.version")
-      end
+      context.eval("jade.version")
     end
 
     # Compile a Jade template for client-side use with JST
@@ -48,13 +51,10 @@ module Jader
     # @param [String] file_name name of template file used to resolve mixins inclusion
     # @return [String] Jade template compiled into Javascript and wrapped inside an anonymous function for JST
     def compile(template, file_name = '')
-      v8_context do |context|
-        template = template.read if template.respond_to?(:read)
-        file_name.match(/views\/([^\/]+)\//)
-        controller_name = $1 || nil
-        combo = (template_mixins(controller_name) << template).join("\n").to_json
-        context.eval("jade.compile(#{combo},#{@options.to_json})").to_s.sub('function anonymous','function')
-      end
+      template = template.read if template.respond_to?(:read)
+      file_name.match(/views\/([^\/]+)\//)
+      controller_name = $1 || nil
+      context.eval("jade.compile(#{combo(controller_name, template)},#{@options.to_json}).toString()").to_s.sub('function anonymous','function')
     end
 
     # Compile and evaluate a Jade template for server-side rendering
@@ -63,20 +63,7 @@ module Jader
     # @param [Hash] vars controller instance variables passed to the template
     # @return [String] HTML output of compiled Jade template
     def render(template, controller_name, vars = {})
-      v8_context do |context|
-        context.eval(Jader.configuration.includes.join("\n"))
-        combo = (template_mixins(controller_name) << template).join("\n").to_json
-        context.eval("var fn = jade.compile(#{combo})")
-        context.eval("fn(#{vars.to_jade.to_json})")
-      end
-      #tmpl = context.eval("jade.precompile(#{combo}, #{@options.to_json})")
-      #context.eval(%{
-      #  function(locals){
-      #    #{Jader::Source::runtime}
-      #    #{Jader.configuration.includes.join("\n")}
-      #    #{tmpl}
-      #  }.call(null,#{vars.to_jade.to_json})
-      #})
+      server_context.exec("return jade.compile(#{combo(controller_name, template)})(#{vars.to_jade.to_json})")
     end
 
     # Jade template mixins for a given controller
@@ -93,6 +80,10 @@ module Jader
         end
       end
       mixins
+    end
+
+    def combo(controller_name, template)
+      (template_mixins(controller_name) << template).join("\n").to_json
     end
 
   end

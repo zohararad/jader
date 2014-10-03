@@ -12,12 +12,6 @@ describe Jader::Compiler do
     }
   end
 
-  it "should contain v8 context" do
-    @compiler.v8_context do |context|
-      context.eval("typeof window.jade").should == 'object'
-    end
-  end
-
   it "should define Jade.JS compiler version" do
     @compiler.jade_version.should == "0.27.6"
   end
