@@ -3,8 +3,9 @@
 Jade is a very popular templating engine for Node.js. This gem gives
 you ability to easily use Jade templates for both server and client side in your Rails project.
 
-On the client-side your templates should be used with Rails' JST engine. On the server side, you can render your
-Jade templates as Rails views (similar to how you'd render ERB or HAML templates).
+On the client-side your templates should be used with
+[Sprockets' JST engine](https://github.com/sstephenson/sprockets#javascript-templating-with-ejs-and-eco).
+On the server side, you can render your Jade templates as Rails views (similar to how you'd render ERB or HAML templates).
 
 ## Writing your templates
 
