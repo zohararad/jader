@@ -66,7 +66,15 @@ Jader.configure do |config|
 end
 ```
 
-Internally, this adds a `before_filter` to `ApplicationController::Base` that prepends the provided path to `ActionView::Context` .
+Then, to add a `before_filter` to `ApplicationController::Base` that prepends the provided path to `ActionView::Context` add the following config:
+
+```ruby
+Jader.configure do |config|
+  ...
+  # prepend provided views_path
+  config.prepend_view_path = true
+end
+```
 
 ### Client-side code
 
